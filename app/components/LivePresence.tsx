@@ -9,6 +9,7 @@ import {
 } from "@livekit/components-react";
 import { Track } from "livekit-client";
 import { useState } from "react";
+import { createPortal } from "react-dom";
 
 type SessionCredentials = {
   mode: "livekit";
@@ -103,7 +104,7 @@ export function LivePresence() {
   }
 
   if (session.mode === "embed") {
-    return (
+    return createPortal(
       <div
         className="mentor-modal"
         role="dialog"
@@ -135,7 +136,8 @@ export function LivePresence() {
             Speak naturally, then leave a short pause so Nelly can respond.
           </footer>
         </div>
-      </div>
+      </div>,
+      document.body,
     );
   }
 

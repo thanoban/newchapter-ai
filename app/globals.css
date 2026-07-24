@@ -73,7 +73,7 @@ button {
   gap: 11px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 700;
 }
 
@@ -111,6 +111,7 @@ button {
   background: rgba(169, 198, 173, 0.08);
   cursor: pointer;
   transition: 160ms ease;
+  font-size: 15px;
 }
 
 .new-session:hover,
@@ -123,7 +124,7 @@ button {
 .sidebar-label {
   margin: 34px 0 11px;
   color: var(--quiet);
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.15em;
   text-transform: uppercase;
@@ -142,14 +143,14 @@ button {
 }
 
 .session-card strong {
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 600;
 }
 
 .session-card span {
   margin-top: 5px;
   color: var(--quiet);
-  font-size: 11px;
+  font-size: 13px;
 }
 
 .privacy-note {
@@ -158,7 +159,7 @@ button {
   border: 1px solid var(--line);
   border-radius: 14px;
   color: var(--muted);
-  font-size: 11px;
+  font-size: 13px;
   line-height: 1.55;
 }
 
@@ -186,7 +187,7 @@ button {
 
 .eyebrow {
   color: var(--sage);
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.17em;
   text-transform: uppercase;
@@ -195,7 +196,7 @@ button {
 .room-header h1 {
   margin: 4px 0 0;
   font-family: Georgia, "Times New Roman", serif;
-  font-size: 20px;
+  font-size: 24px;
   font-weight: 400;
 }
 
@@ -204,7 +205,7 @@ button {
   align-items: center;
   gap: 8px;
   color: var(--muted);
-  font-size: 11px;
+  font-size: 13px;
 }
 
 .status-dot {
@@ -388,7 +389,7 @@ button {
 .mentor-call-header h2 {
   margin: 4px 0 0;
   font-family: Georgia, "Times New Roman", serif;
-  font-size: 23px;
+  font-size: 28px;
   font-weight: 400;
 }
 
@@ -398,7 +399,7 @@ button {
   border-radius: 10px;
   background: rgba(228, 178, 156, 0.08);
   color: #efc4ba;
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 700;
   cursor: pointer;
 }
@@ -421,7 +422,7 @@ button {
   padding: 11px 20px;
   border-top: 1px solid var(--line);
   color: var(--muted);
-  font-size: 10px;
+  font-size: 14px;
   text-align: center;
 }
 
@@ -516,7 +517,7 @@ button {
   max-width: 490px;
   margin: 0;
   color: var(--muted);
-  font-size: 13px;
+  font-size: 16px;
   line-height: 1.6;
 }
 
@@ -532,7 +533,7 @@ button {
   border: 1px solid var(--line);
   border-radius: 999px;
   color: #b8c5ba;
-  font-size: 10px;
+  font-size: 12px;
 }
 
 .messages {
@@ -551,7 +552,7 @@ button {
   max-width: 78%;
   padding: 13px 15px;
   border-radius: 16px;
-  font-size: 13px;
+  font-size: 16px;
   line-height: 1.62;
   white-space: pre-wrap;
 }
@@ -576,7 +577,7 @@ button {
   display: block;
   margin-bottom: 5px;
   color: var(--sage);
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.13em;
   text-transform: uppercase;
@@ -626,6 +627,7 @@ button {
   background: transparent;
   color: var(--ink);
   line-height: 1.5;
+  font-size: 17px;
 }
 
 .composer textarea::placeholder {
@@ -641,7 +643,7 @@ button {
 
 .composer-hint {
   color: var(--quiet);
-  font-size: 10px;
+  font-size: 12px;
 }
 
 .send-button {
@@ -651,7 +653,7 @@ button {
   border-radius: 10px;
   background: var(--sage-bright);
   color: #132019;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 700;
   cursor: pointer;
   transition: 160ms ease;
@@ -672,14 +674,14 @@ button {
 .care-rail h2 {
   margin: 5px 0 6px;
   font-family: Georgia, "Times New Roman", serif;
-  font-size: 22px;
+  font-size: 28px;
   font-weight: 400;
 }
 
 .care-intro {
   margin: 0 0 24px;
   color: var(--quiet);
-  font-size: 11px;
+  font-size: 13px;
   line-height: 1.55;
 }
 
@@ -724,14 +726,14 @@ button {
 }
 
 .agent-copy strong {
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 600;
 }
 
 .agent-copy span {
   margin-top: 3px;
   color: var(--quiet);
-  font-size: 9px;
+  font-size: 11px;
 }
 
 .agent-state {
@@ -757,14 +759,14 @@ button {
 .grounding-card strong {
   color: #e5c6b7;
   font-family: Georgia, "Times New Roman", serif;
-  font-size: 14px;
+  font-size: 17px;
   font-weight: 400;
 }
 
 .grounding-card p,
 .safety-note {
   color: var(--muted);
-  font-size: 10px;
+  font-size: 13px;
   line-height: 1.6;
 }
 
@@ -776,7 +778,7 @@ button {
   margin-top: auto;
   padding-top: 22px;
   color: #89958c;
-  font-size: 9px;
+  font-size: 11px;
 }
 
 .safety-note b {
