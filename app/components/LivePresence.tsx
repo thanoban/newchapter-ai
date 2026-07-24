@@ -11,9 +11,15 @@ import { Track } from "livekit-client";
 import { useState } from "react";
 
 type SessionCredentials = {
+  mode: "livekit";
   callId: string;
   serverUrl: string;
   participantToken: string;
+};
+
+type EmbedSession = {
+  mode: "embed";
+  embedUrl: string;
 };
 
 function AvatarTrack() {
@@ -35,14 +41,14 @@ function AvatarTrack() {
 }
 
 export function LivePresence() {
-  const [credentials, setCredentials] = useState<SessionCredentials | null>(
-    null,
-  );
+  const [session, setSession] = useState<
+    SessionCredentials | EmbedSession | null
+  >(null);
   const [isStarting, setIsStarting] = useState(false);
   const [error, setError] = useState("");
 
   async function startSession() {
-    if (isStarting || credentials) return;
+    if (isStarting || session) return;
     setError("");
     setIsStarting(true);
 
@@ -52,16 +58,20 @@ export function LivePresence() {
       });
       const body = (await response.json()) as
         | SessionCredentials
+        | EmbedSession
         | { error?: string };
 
-      if (!response.ok || !("participantToken" in body)) {
+      if (
+        !response.ok ||
+        (!("participantToken" in body) && !("embedUrl" in body))
+      ) {
         throw new Error(
           "error" in body && body.error
             ? body.error
             : "Could not start live presence.",
         );
       }
-      setCredentials(body);
+      setSession(body);
     } catch (caught) {
       setError(
         caught instanceof Error
@@ -73,7 +83,7 @@ export function LivePresence() {
     }
   }
 
-  if (!credentials) {
+  if (!session) {
     return (
       <div className="avatar-orbit avatar-connect">
         <span className="avatar-ring" />
@@ -92,15 +102,35 @@ export function LivePresence() {
     );
   }
 
+  if (session.mode === "embed") {
+    return (
+      <div className="live-presence embedded-presence">
+        <iframe
+          title="Talk with Nelly"
+          src={session.embedUrl}
+          allow="camera; microphone; fullscreen"
+          allowFullScreen
+        />
+        <button
+          type="button"
+          className="end-call embedded-end-call"
+          onClick={() => setSession(null)}
+        >
+          Close
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div className="live-presence" data-lk-theme="default">
       <LiveKitRoom
-        token={credentials.participantToken}
-        serverUrl={credentials.serverUrl}
+        token={session.participantToken}
+        serverUrl={session.serverUrl}
         connect
         audio
         video={false}
-        onDisconnected={() => setCredentials(null)}
+        onDisconnected={() => setSession(null)}
         onError={(roomError) => setError(roomError.message)}
       >
         <AvatarTrack />
@@ -113,7 +143,7 @@ export function LivePresence() {
           <button
             type="button"
             className="end-call"
-            onClick={() => setCredentials(null)}
+            onClick={() => setSession(null)}
           >
             End
           </button>

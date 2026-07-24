@@ -35,6 +35,16 @@ export async function POST() {
       signal: AbortSignal.timeout(15_000),
     });
 
+    if (upstream.status === 402 || upstream.status === 403) {
+      return NextResponse.json(
+        {
+          mode: "embed",
+          embedUrl: `https://bey.chat/${encodeURIComponent(agentId)}`,
+        },
+        { headers: { "Cache-Control": "no-store" } },
+      );
+    }
+
     if (!upstream.ok) {
       throw new Error(`Beyond Presence returned ${upstream.status}.`);
     }
@@ -46,6 +56,7 @@ export async function POST() {
 
     return NextResponse.json(
       {
+        mode: "livekit",
         callId: call.id,
         serverUrl: call.livekit_url,
         participantToken: call.livekit_token,

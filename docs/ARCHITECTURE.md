@@ -52,6 +52,9 @@ flowchart LR
   OpenAI-compatible streaming endpoint.
 - The browser receives only a short-lived LiveKit room URL and participant
   token, then renders the remote avatar track with the official LiveKit client.
+- Accounts without programmatic-call entitlement fall back to Beyond
+  Presence's official `bey.chat` iframe embed; upgrading the provider plan
+  automatically unlocks the native LiveKit path without a client rewrite.
 - The orchestrator remains the source of truth for prompts, safety decisions,
   memory policy, and conversation behavior.
 
