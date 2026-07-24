@@ -1,5 +1,13 @@
 import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
 import { getChatGPTUser } from "../../../chatgpt-auth";
+import {
+  avatarUsageIdentity,
+  consumeAvatarUsage,
+  DAILY_AVATAR_LIMIT,
+  readSignedUsageCookie,
+  signedUsageCookie,
+} from "../../../lib/avatar-usage";
 
 type BeyondCall = {
   id: string;
@@ -19,6 +27,21 @@ export async function POST() {
   }
 
   const user = await getChatGPTUser();
+  const cookieStore = await cookies();
+  const usage = consumeAvatarUsage(
+    await avatarUsageIdentity(user),
+    readSignedUsageCookie(cookieStore.get("nc_avatar_usage")?.value),
+  );
+
+  if (!usage.allowed) {
+    return NextResponse.json(
+      {
+        error: `You’ve used today’s ${DAILY_AVATAR_LIMIT} live sessions. Text support is still open, and your live allowance resets tomorrow.`,
+        remaining: 0,
+      },
+      { status: 429, headers: { "Cache-Control": "no-store" } },
+    );
+  }
 
   try {
     const upstream = await fetch("https://api.bey.dev/v1/calls", {
@@ -36,13 +59,22 @@ export async function POST() {
     });
 
     if (upstream.status === 402 || upstream.status === 403) {
-      return NextResponse.json(
+      const response = NextResponse.json(
         {
           mode: "embed",
           embedUrl: `https://bey.chat/${encodeURIComponent(agentId)}`,
+          remaining: usage.remaining,
         },
         { headers: { "Cache-Control": "no-store" } },
       );
+      response.cookies.set("nc_avatar_usage", signedUsageCookie(usage.record), {
+        httpOnly: true,
+        sameSite: "lax",
+        secure: process.env.NODE_ENV === "production",
+        path: "/",
+        maxAge: 60 * 60 * 48,
+      });
+      return response;
     }
 
     if (!upstream.ok) {
@@ -54,12 +86,13 @@ export async function POST() {
       throw new Error("Beyond Presence returned an incomplete call.");
     }
 
-    return NextResponse.json(
+    const response = NextResponse.json(
       {
         mode: "livekit",
         callId: call.id,
         serverUrl: call.livekit_url,
         participantToken: call.livekit_token,
+        remaining: usage.remaining,
       },
       {
         headers: {
@@ -67,6 +100,14 @@ export async function POST() {
         },
       },
     );
+    response.cookies.set("nc_avatar_usage", signedUsageCookie(usage.record), {
+      httpOnly: true,
+      sameSite: "lax",
+      secure: process.env.NODE_ENV === "production",
+      path: "/",
+      maxAge: 60 * 60 * 48,
+    });
+    return response;
   } catch {
     return NextResponse.json(
       { error: "Live presence is temporarily unavailable." },

@@ -16,11 +16,13 @@ type SessionCredentials = {
   callId: string;
   serverUrl: string;
   participantToken: string;
+  remaining: number;
 };
 
 type EmbedSession = {
   mode: "embed";
   embedUrl: string;
+  remaining: number;
 };
 
 function AvatarTrack() {
@@ -48,6 +50,7 @@ export function LivePresence() {
   const [isStarting, setIsStarting] = useState(false);
   const [embedReady, setEmbedReady] = useState(false);
   const [error, setError] = useState("");
+  const [remaining, setRemaining] = useState(3);
 
   async function startSession() {
     if (isStarting || session) return;
@@ -73,6 +76,7 @@ export function LivePresence() {
             : "Could not start live presence.",
         );
       }
+      setRemaining(body.remaining);
       setSession(body);
     } catch (caught) {
       setError(
@@ -97,8 +101,11 @@ export function LivePresence() {
           onClick={startSession}
           disabled={isStarting}
         >
-          {isStarting ? "Opening room…" : "Talk with Aadhi"}
+          {isStarting ? "Opening video…" : "Talk with AI video Aadhi"}
         </button>
+        <span className="presence-allowance">
+          {remaining} live session{remaining === 1 ? "" : "s"} left today
+        </span>
         {error ? <span className="presence-error">{error}</span> : null}
       </div>
     );
@@ -115,8 +122,8 @@ export function LivePresence() {
         <div className="mentor-call">
           <header className="mentor-call-header">
             <div>
-              <span className="eyebrow">Live presence mentor</span>
-              <h2 id="mentor-call-title">Talk with Aadhi</h2>
+              <span className="eyebrow">AI video companion</span>
+              <h2 id="mentor-call-title">Video call with Aadhi</h2>
               <p>
                 Speak one short thought, then pause. Aadhi replies after the
                 call detects that you have finished.
@@ -132,7 +139,7 @@ export function LivePresence() {
             </button>
           </header>
           <iframe
-            title="Talk with Aadhi"
+            title="AI video call with Aadhi"
             src={session.embedUrl}
             allow="autoplay; camera; microphone; fullscreen"
             allowFullScreen

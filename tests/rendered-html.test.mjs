@@ -22,18 +22,19 @@ async function render(pathname = "/") {
   );
 }
 
-test("server-renders the NewChapter conversation experience", async () => {
+test("server-renders the NewChapter landing page and guided check-in", async () => {
   const response = await render();
   assert.equal(response.status, 200);
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
 
   const html = await response.text();
   assert.match(html, /<title>NewChapter/);
-  assert.match(html, /A steadier place after heartbreak/);
-  assert.match(html, /Feel it without facing it alone/);
-  assert.match(html, /Beyond Presence ready/);
-  assert.match(html, /Talk with Aadhi/);
-  assert.match(html, /Safety-first routing/);
+  assert.match(html, /You don’t have to/);
+  assert.match(html, /What is NewChapter/);
+  assert.match(html, /Help us understand where your heart is today/);
+  assert.match(html, /What best describes this moment/);
+  assert.match(html, /Talk with AI video Aadhi/);
+  assert.match(html, /3 live sessions daily/);
   assert.match(html, /\/og\.png/);
   assert.doesNotMatch(html, /codex-preview|react-loading-skeleton/i);
 });
