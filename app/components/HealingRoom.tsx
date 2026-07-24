@@ -152,10 +152,10 @@ export function HealingRoom() {
           <section className="presence-stage" aria-labelledby="presence-title">
             <LivePresence />
             <div className="presence-copy">
-              <span className="eyebrow">Nelly · presence companion</span>
+              <span className="eyebrow">Aadhi · presence companion</span>
               <h2 id="presence-title">Feel it without facing it alone.</h2>
               <p>
-                Nelly gives one warm face and voice to a coordinated care team.
+                Aadhi gives one warm face and voice to a coordinated care team.
                 She will not rush grief, diagnose you, or pretend painful
                 memories can simply be erased.
               </p>
@@ -171,7 +171,7 @@ export function HealingRoom() {
             {messages.map((message) => (
               <div className={`message ${message.role}`} key={message.id}>
                 <span className="message-label">
-                  {message.role === "assistant" ? "Nelly" : "You"}
+                  {message.role === "assistant" ? "Aadhi" : "You"}
                 </span>
                 {message.content}
               </div>
@@ -212,7 +212,7 @@ export function HealingRoom() {
       </section>
 
       <aside className="care-rail" aria-label="Care team">
-        <span className="eyebrow">Behind Nelly</span>
+        <span className="eyebrow">Behind Aadhi</span>
         <h2>Your care circle</h2>
         <p className="care-intro">
           Specialists collaborate privately. One grounded response comes back

@@ -104,7 +104,7 @@ async def run_chat_completion(
 
 def clean_spoken_response(message: str) -> str:
     cleaned = message.strip()
-    for prefix in ("nelly:", "maya:", "assistant:"):
+    for prefix in ("aadhi:", "nelly:", "maya:", "assistant:"):
         if cleaned.lower().startswith(prefix):
             return cleaned[len(prefix) :].lstrip()
     return cleaned

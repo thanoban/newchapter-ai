@@ -33,7 +33,7 @@ function AvatarTrack() {
     return (
       <div className="avatar-waiting" role="status">
         <span className="avatar-pulse" aria-hidden="true" />
-        Nelly is joining…
+        Aadhi is joining…
       </div>
     );
   }
@@ -97,7 +97,7 @@ export function LivePresence() {
           onClick={startSession}
           disabled={isStarting}
         >
-          {isStarting ? "Opening room…" : "Talk with Nelly"}
+          {isStarting ? "Opening room…" : "Talk with Aadhi"}
         </button>
         {error ? <span className="presence-error">{error}</span> : null}
       </div>
@@ -116,9 +116,9 @@ export function LivePresence() {
           <header className="mentor-call-header">
             <div>
               <span className="eyebrow">Live presence mentor</span>
-              <h2 id="mentor-call-title">Talk with Nelly</h2>
+              <h2 id="mentor-call-title">Talk with Aadhi</h2>
               <p>
-                Speak one short thought, then pause. Nelly replies after the
+                Speak one short thought, then pause. Aadhi replies after the
                 call detects that you have finished.
               </p>
             </div>
@@ -132,7 +132,7 @@ export function LivePresence() {
             </button>
           </header>
           <iframe
-            title="Talk with Nelly"
+            title="Talk with Aadhi"
             src={session.embedUrl}
             allow="autoplay; camera; microphone; fullscreen"
             allowFullScreen
@@ -170,7 +170,7 @@ export function LivePresence() {
         <div className="live-controls">
           <StartAudio label="Enable audio" />
           <span className="live-indicator">
-            <span aria-hidden="true" /> Live with Nelly
+            <span aria-hidden="true" /> Live with Aadhi
           </span>
           <button
             type="button"

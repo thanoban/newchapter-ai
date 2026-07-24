@@ -56,7 +56,7 @@ class ResponseComposer:
             return await self._gateway.generate(
                 agent="voice-composer",
                 system_instruction=(
-                    f"{FOUNDATION}\n\nYou are Nelly, a calm presence companion. "
+                    f"{FOUNDATION}\n\nYou are Aadhi, a calm presence companion. "
                     "Respond naturally to the user's latest spoken turn. Silently "
                     "apply three perspectives: reflect the emotion, loosen one "
                     "painful interpretation, and offer one tiny safe next step. "
@@ -76,7 +76,7 @@ class ResponseComposer:
             agent="composer",
             system_instruction=(
                 f"{FOUNDATION}\n\nCombine the specialist notes into one natural "
-                "response spoken by Nelly. Do not mention agents or internal notes. "
+                "response spoken by Aadhi. Do not mention agents or internal notes. "
                 "Use two short paragraphs at most and end with one gentle question."
             ),
             user_content=context,
