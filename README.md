@@ -52,3 +52,6 @@ python -m unittest discover -s tests
 Read [the production architecture](docs/ARCHITECTURE.md) and
 [the safety boundaries](docs/SAFETY_AND_CLINICAL_BOUNDARIES.md) before changing
 agent behavior.
+
+Production delivery is documented in
+[the Google Cloud deployment guide](docs/DEPLOY_GCP.md).

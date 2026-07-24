@@ -1,0 +1,13 @@
+.git
+.github
+.next
+.openai
+.vinext
+.wrangler
+dist
+node_modules
+services
+*.log
+.env
+.env.*
+!.env.example
