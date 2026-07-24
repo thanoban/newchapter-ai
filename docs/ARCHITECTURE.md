@@ -15,8 +15,9 @@ flowchart LR
   E --> B[Web BFF]
   B --> O[Conversation orchestrator]
   B --> A[Avatar session API]
-  A --> L[LiveKit]
-  L --> P[Beyond Presence renderer]
+  A --> P[Beyond Presence managed agent]
+  P --> L[Short-lived LiveKit room]
+  P -->|OpenAI-compatible streaming| O
   O --> S[Safety policy service]
   O --> V[Vertex AI Gemini]
   O --> M[Consent memory service]
@@ -43,12 +44,16 @@ flowchart LR
   domain workflow.
 - Adds Model Armor before and after Gemini in production.
 
-### Avatar renderer
+### Live presence
 
-- Separate LiveKit worker using the official Beyond Presence plugin.
-- Converts only approved voice output to synchronized avatar media.
-- Does not own prompts, safety decisions, memory, or conversation policy.
-- Uses short-lived room and participant tokens.
+- The web BFF creates Beyond Presence calls without exposing the provider key.
+- Beyond Presence owns speech recognition, voice synthesis, and avatar media.
+- Its managed agent calls the orchestrator through the authenticated
+  OpenAI-compatible streaming endpoint.
+- The browser receives only a short-lived LiveKit room URL and participant
+  token, then renders the remote avatar track with the official LiveKit client.
+- The orchestrator remains the source of truth for prompts, safety decisions,
+  memory policy, and conversation behavior.
 
 ### Data platform
 

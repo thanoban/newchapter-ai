@@ -32,6 +32,7 @@ test("server-renders the NewChapter conversation experience", async () => {
   assert.match(html, /A steadier place after heartbreak/);
   assert.match(html, /Feel it without facing it alone/);
   assert.match(html, /Beyond Presence ready/);
+  assert.match(html, /Talk with Nelly/);
   assert.match(html, /Safety-first routing/);
   assert.match(html, /\/og\.png/);
   assert.doesNotMatch(html, /codex-preview|react-loading-skeleton/i);

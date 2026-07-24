@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
+import { LivePresence } from "./LivePresence";
 
 type Message = {
   id: string;
@@ -149,17 +150,12 @@ export function HealingRoom() {
 
         <div className="conversation">
           <section className="presence-stage" aria-labelledby="presence-title">
-            <div className="avatar-orbit" aria-label="Maya avatar preview">
-              <span className="avatar-ring" />
-              <span className="avatar-ring" />
-              <div className="avatar" />
-              <span className="avatar-badge">AVATAR PREVIEW</span>
-            </div>
+            <LivePresence />
             <div className="presence-copy">
-              <span className="eyebrow">Maya · presence companion</span>
+              <span className="eyebrow">Nelly · presence companion</span>
               <h2 id="presence-title">Feel it without facing it alone.</h2>
               <p>
-                Maya gives one warm face and voice to a coordinated care team.
+                Nelly gives one warm face and voice to a coordinated care team.
                 She will not rush grief, diagnose you, or pretend painful
                 memories can simply be erased.
               </p>
@@ -175,7 +171,7 @@ export function HealingRoom() {
             {messages.map((message) => (
               <div className={`message ${message.role}`} key={message.id}>
                 <span className="message-label">
-                  {message.role === "assistant" ? "Maya" : "You"}
+                  {message.role === "assistant" ? "Nelly" : "You"}
                 </span>
                 {message.content}
               </div>
@@ -216,7 +212,7 @@ export function HealingRoom() {
       </section>
 
       <aside className="care-rail" aria-label="Care team">
-        <span className="eyebrow">Behind Maya</span>
+        <span className="eyebrow">Behind Nelly</span>
         <h2>Your care circle</h2>
         <p className="care-intro">
           Specialists collaborate privately. One grounded response comes back
