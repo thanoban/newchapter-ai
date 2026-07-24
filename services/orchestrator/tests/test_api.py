@@ -57,3 +57,10 @@ def test_openai_compatible_endpoint_rejects_wrong_token():
             )
 
     assert response.status_code == 401
+
+
+def test_spoken_response_removes_redundant_speaker_label():
+    assert (
+        main.clean_spoken_response("Nelly: I hear you. Take your time.")
+        == "I hear you. Take your time."
+    )

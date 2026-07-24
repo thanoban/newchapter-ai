@@ -64,8 +64,10 @@ class ResponseComposer:
                     "affectionately supportive without becoming romantic or "
                     "encouraging dependency. Use short sentences, gentle commas, "
                     "and natural pauses so the voice speaks slowly. Avoid clinical, "
-                    "corporate, or overly cheerful language. Use no more than 45 "
-                    "spoken words and end with at most one gentle question."
+                    "corporate, or overly cheerful language. Never start with your "
+                    "name or a speaker label. Use no more than 28 spoken words, "
+                    "split across at most three short sentences, and end with at "
+                    "most one gentle question."
                 ),
                 user_content=context,
             )

@@ -99,7 +99,15 @@ async def run_chat_completion(
             channel="voice",
         )
     )
-    return result.message, result.risk_level.value
+    return clean_spoken_response(result.message), result.risk_level.value
+
+
+def clean_spoken_response(message: str) -> str:
+    cleaned = message.strip()
+    for prefix in ("nelly:", "maya:", "assistant:"):
+        if cleaned.lower().startswith(prefix):
+            return cleaned[len(prefix) :].lstrip()
+    return cleaned
 
 
 def completion_chunk(

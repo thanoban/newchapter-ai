@@ -46,6 +46,7 @@ export function LivePresence() {
     SessionCredentials | EmbedSession | null
   >(null);
   const [isStarting, setIsStarting] = useState(false);
+  const [embedReady, setEmbedReady] = useState(false);
   const [error, setError] = useState("");
 
   async function startSession() {
@@ -116,6 +117,10 @@ export function LivePresence() {
             <div>
               <span className="eyebrow">Live presence mentor</span>
               <h2 id="mentor-call-title">Talk with Nelly</h2>
+              <p>
+                Speak one short thought, then pause. Nelly replies after the
+                call detects that you have finished.
+              </p>
             </div>
             <button
               type="button"
@@ -131,9 +136,17 @@ export function LivePresence() {
             src={session.embedUrl}
             allow="autoplay; camera; microphone; fullscreen"
             allowFullScreen
+            onLoad={() => setEmbedReady(true)}
           />
           <footer className="mentor-call-footer">
-            Speak naturally, then leave a short pause so Nelly can respond.
+            <span className={`call-readiness ${embedReady ? "ready" : ""}`}>
+              <span aria-hidden="true" />
+              {embedReady ? "Call screen ready" : "Connecting…"}
+            </span>
+            <span>
+              If the microphone icon is crossed out, click it. After speaking,
+              stay quiet for a moment so your turn can finish.
+            </span>
           </footer>
         </div>
       </div>,
