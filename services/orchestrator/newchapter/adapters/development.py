@@ -23,9 +23,9 @@ class DevelopmentModelGateway:
                 "strongest right now?"
             ),
             "voice-composer": (
-                "That sounds heavy, and you do not have to solve it all at once. "
-                "Put both feet down and take one slow breath with me. What feeling "
-                "is strongest right now?"
+                "That sounds heavy. Take your time... you do not have to solve it "
+                "all at once. Put both feet down, and take one slow breath with me. "
+                "What feeling is strongest, right now?"
             ),
         }
         return responses.get(agent, "")
