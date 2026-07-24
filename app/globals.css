@@ -707,11 +707,24 @@ button {
 .presence-allowance {
   position: absolute;
   right: 0;
-  bottom: -19px;
+  bottom: -31px;
   left: 0;
   color: var(--quiet);
   font-size: 9px;
   text-align: center;
+}
+
+.presence-kind {
+  position: absolute;
+  right: 0;
+  bottom: -16px;
+  left: 0;
+  color: var(--sage-bright);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-align: center;
+  text-transform: uppercase;
 }
 
 .presence-button:hover:not(:disabled),

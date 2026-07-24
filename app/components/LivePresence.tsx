@@ -101,8 +101,9 @@ export function LivePresence() {
           onClick={startSession}
           disabled={isStarting}
         >
-          {isStarting ? "Opening video…" : "Talk with AI video Aadhi"}
+          {isStarting ? "Aadhi is joining…" : "Talk it through with Aadhi"}
         </button>
+        <span className="presence-kind">AI video companion</span>
         <span className="presence-allowance">
           {remaining} live session{remaining === 1 ? "" : "s"} left today
         </span>
