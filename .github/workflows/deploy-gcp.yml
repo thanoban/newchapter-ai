@@ -16,12 +16,9 @@ permissions:
 
 env:
   PROJECT_ID: projectbucket-501814
-  PROJECT_NUMBER: "1038855716597"
   REGION: asia-south1
   ARTIFACT_REPOSITORY: newchapter
   WEB_SERVICE: newchapter-web
-  ORCHESTRATOR_SERVICE: newchapter-orchestrator
-  WEB_RUNTIME_SERVICE_ACCOUNT: newchapter-web-runtime@projectbucket-501814.iam.gserviceaccount.com
   ORCHESTRATOR_RUNTIME_SERVICE_ACCOUNT: newchapter-orch-runtime@projectbucket-501814.iam.gserviceaccount.com
   DEPLOY_SERVICE_ACCOUNT: newchapter-deployer@projectbucket-501814.iam.gserviceaccount.com
   WORKLOAD_IDENTITY_PROVIDER: projects/1038855716597/locations/global/workloadIdentityPools/github-pool/providers/newchapter-provider
@@ -71,6 +68,11 @@ jobs:
           service_account: ${{ env.DEPLOY_SERVICE_ACCOUNT }}
           token_format: access_token
 
+      - name: Set up Google Cloud CLI
+        uses: google-github-actions/setup-gcloud@v3
+        with:
+          project_id: ${{ env.PROJECT_ID }}
+
       - name: Sign in to Artifact Registry
         uses: docker/login-action@v4
         with:
@@ -93,31 +95,6 @@ jobs:
           cache-from: type=gha,scope=orchestrator
           cache-to: type=gha,mode=max,scope=orchestrator
 
-      - name: Deploy orchestrator
-        id: deploy-orchestrator
-        uses: google-github-actions/deploy-cloudrun@v3
-        with:
-          project_id: ${{ env.PROJECT_ID }}
-          region: ${{ env.REGION }}
-          service: ${{ env.ORCHESTRATOR_SERVICE }}
-          image: ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.ARTIFACT_REPOSITORY }}/orchestrator:${{ github.sha }}
-          env_vars: |
-            GOOGLE_CLOUD_PROJECT=${{ env.PROJECT_ID }}
-            GOOGLE_CLOUD_LOCATION=global
-            GOOGLE_GENAI_USE_VERTEXAI=true
-            VERTEX_MODEL=gemini-2.5-flash
-          secrets: |
-            ORCHESTRATOR_SERVICE_TOKEN=newchapter-orchestrator-token:latest
-          flags: >-
-            --allow-unauthenticated
-            --service-account=${{ env.ORCHESTRATOR_RUNTIME_SERVICE_ACCOUNT }}
-            --port=8080
-            --cpu=1
-            --memory=512Mi
-            --concurrency=40
-            --min-instances=0
-            --max-instances=3
-
       - name: Build and push web image
         uses: docker/build-push-action@v7
         with:
@@ -132,38 +109,43 @@ jobs:
 
       - name: Deploy web application
         id: deploy-web
-        uses: google-github-actions/deploy-cloudrun@v3
-        with:
-          project_id: ${{ env.PROJECT_ID }}
-          region: ${{ env.REGION }}
-          service: ${{ env.WEB_SERVICE }}
-          image: ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.ARTIFACT_REPOSITORY }}/web:${{ github.sha }}
-          env_vars: |
-            ORCHESTRATOR_BASE_URL=${{ steps.deploy-orchestrator.outputs.url }}
-          secrets: |
-            ORCHESTRATOR_SERVICE_TOKEN=newchapter-orchestrator-token:latest
-          flags: >-
-            --allow-unauthenticated
-            --service-account=${{ env.WEB_RUNTIME_SERVICE_ACCOUNT }}
-            --port=8080
-            --cpu=1
-            --memory=512Mi
-            --concurrency=80
-            --min-instances=0
-            --max-instances=5
+        shell: bash
+        run: |
+          set -euo pipefail
+          WEB_IMAGE="${REGION}-docker.pkg.dev/${PROJECT_ID}/${ARTIFACT_REPOSITORY}/web:${GITHUB_SHA}"
+          ORCHESTRATOR_IMAGE="${REGION}-docker.pkg.dev/${PROJECT_ID}/${ARTIFACT_REPOSITORY}/orchestrator:${GITHUB_SHA}"
+          sed \
+            -e "s|__WEB_IMAGE__|${WEB_IMAGE}|g" \
+            -e "s|__ORCHESTRATOR_IMAGE__|${ORCHESTRATOR_IMAGE}|g" \
+            infra/cloud-run-service.yaml > "${RUNNER_TEMP}/cloud-run-service.yaml"
 
-      - name: Smoke test deployed services
+          gcloud run services replace "${RUNNER_TEMP}/cloud-run-service.yaml" \
+            --project="${PROJECT_ID}" \
+            --region="${REGION}" \
+            --quiet
+          gcloud run services add-iam-policy-binding "${WEB_SERVICE}" \
+            --project="${PROJECT_ID}" \
+            --region="${REGION}" \
+            --member="allUsers" \
+            --role="roles/run.invoker" \
+            --quiet
+
+          WEB_URL="$(gcloud run services describe "${WEB_SERVICE}" \
+            --project="${PROJECT_ID}" \
+            --region="${REGION}" \
+            --format='value(status.url)')"
+          echo "url=${WEB_URL}" >> "${GITHUB_OUTPUT}"
+
+      - name: Smoke test deployed service
         shell: bash
         env:
-          ORCHESTRATOR_URL: ${{ steps.deploy-orchestrator.outputs.url }}
           WEB_URL: ${{ steps.deploy-web.outputs.url }}
         run: |
           set -euo pipefail
           curl --fail --show-error --silent \
             --retry 6 --retry-all-errors --retry-delay 5 \
-            "${ORCHESTRATOR_URL}/healthz"
+            "${WEB_URL}/api/healthz"
           curl --fail --show-error --silent \
             --retry 6 --retry-all-errors --retry-delay 5 \
             "${WEB_URL}/" > /dev/null
           echo "Web: ${WEB_URL}"
-          echo "Orchestrator: ${ORCHESTRATOR_URL}"
