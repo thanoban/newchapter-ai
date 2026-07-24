@@ -1,0 +1,1 @@
+"""Beyond Presence media adapter."""
