@@ -35,6 +35,8 @@ test("server-renders the NewChapter landing page and guided check-in", async () 
   assert.match(html, /What best describes this moment/);
   assert.match(html, /Talk it through with Aadhi/);
   assert.match(html, /AI video companion/);
+  assert.match(html, /Sometimes it helps to say it out loud/);
+  assert.match(html, /\/aadhi-video-preview\.png/);
   assert.match(html, /3 live sessions daily/);
   assert.match(html, /\/og\.png/);
   assert.doesNotMatch(html, /codex-preview|react-loading-skeleton/i);

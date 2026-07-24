@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { HealingRoom } from "./components/HealingRoom";
 
 export default function Home() {
@@ -61,6 +62,33 @@ export default function Home() {
           <p className="boundary-copy">
             Emotional support, not therapy or emergency care.
           </p>
+        </section>
+
+        <section className="meet-section" aria-labelledby="meet-title">
+          <div className="meet-copy">
+            <span className="eyebrow">Meet your AI video companion</span>
+            <h2 id="meet-title">Sometimes it helps to say it out loud.</h2>
+            <p>
+              Talk it through with Aadhi in a calm, face-to-face AI video
+              conversation—without judgment or pressure.
+            </p>
+            <a className="primary-cta" href="#healing-room">
+              Meet Aadhi <span aria-hidden="true">↘</span>
+            </a>
+            <small>Three private, three-minute video sessions daily.</small>
+          </div>
+          <figure className="aadhi-preview">
+            <Image
+              src="/aadhi-video-preview.png"
+              alt="Preview of the Aadhi AI video companion conversation screen"
+              width={1347}
+              height={652}
+              sizes="(max-width: 760px) 100vw, 62vw"
+            />
+            <figcaption>
+              Aadhi is an AI avatar, not a human counsellor.
+            </figcaption>
+          </figure>
         </section>
       </main>
       <div id="healing-room">
