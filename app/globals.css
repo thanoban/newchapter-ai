@@ -353,26 +353,76 @@ button {
   background: transparent;
 }
 
-.embedded-presence {
-  width: 300px;
-  height: 220px;
-  overflow: visible;
+.mentor-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(3, 8, 6, 0.86);
+  backdrop-filter: blur(18px);
 }
 
-.embedded-presence iframe {
+.mentor-call {
+  display: flex;
+  flex-direction: column;
+  width: min(1040px, 100%);
+  height: min(820px, calc(100vh - 48px));
+  overflow: hidden;
+  border: 1px solid rgba(209, 229, 209, 0.2);
+  border-radius: 24px;
+  background: #0b1511;
+  box-shadow: 0 32px 100px rgba(0, 0, 0, 0.52);
+}
+
+.mentor-call-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 17px 20px;
+  border-bottom: 1px solid var(--line);
+}
+
+.mentor-call-header h2 {
+  margin: 4px 0 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 23px;
+  font-weight: 400;
+}
+
+.mentor-close {
+  padding: 9px 14px;
+  border: 1px solid rgba(228, 178, 156, 0.25);
+  border-radius: 10px;
+  background: rgba(228, 178, 156, 0.08);
+  color: #efc4ba;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.mentor-close:hover,
+.mentor-close:focus-visible {
+  background: rgba(228, 178, 156, 0.14);
+  outline: none;
+}
+
+.mentor-call iframe {
+  flex: 1;
   width: 100%;
-  height: 100%;
+  min-height: 0;
   border: 0;
-  border-radius: inherit;
   background: #101c18;
 }
 
-.embedded-end-call {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  z-index: 2;
-  background: rgba(5, 11, 9, 0.82);
+.mentor-call-footer {
+  padding: 11px 20px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 10px;
+  text-align: center;
 }
 
 .avatar-video {
@@ -829,6 +879,25 @@ button {
     width: min(320px, 100%);
     height: 210px;
     margin: auto;
+  }
+
+  .mentor-modal {
+    padding: 0;
+  }
+
+  .mentor-call {
+    width: 100%;
+    height: 100dvh;
+    border: 0;
+    border-radius: 0;
+  }
+
+  .mentor-call-header {
+    padding: 13px 15px;
+  }
+
+  .mentor-call-header h2 {
+    font-size: 19px;
   }
 
   .avatar {

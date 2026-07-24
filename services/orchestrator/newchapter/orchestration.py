@@ -36,6 +36,9 @@ class CareOrchestrator:
             )
 
         context = self._context(turn)
+        if turn.channel == "voice":
+            return await self._handle_voice(context, decision.level, decision.reason)
+
         notes = await asyncio.gather(
             *(agent.contribute(context) for agent in self._specialists),
             return_exceptions=True,
@@ -61,6 +64,28 @@ class CareOrchestrator:
             risk_level=decision.level,
             contributors=("safety", "listener", "reframe", "coach", "critic"),
             metadata={"reason": decision.reason},
+        )
+
+    async def _handle_voice(
+        self,
+        context: str,
+        level: RiskLevel,
+        reason: str,
+    ) -> TurnResult:
+        try:
+            composed = await self._composer.compose(context, voice=True)
+        except Exception:
+            return self._fallback(level, "voice-generation-failed")
+
+        if not self._reviewer.approve(composed):
+            return self._fallback(level, "voice-response-review-failed")
+
+        return TurnResult(
+            message=composed.strip(),
+            risk_level=level,
+            contributors=("safety", "listener", "reframe", "coach", "critic"),
+            mode="vertex-voice-fast-path",
+            metadata={"reason": reason},
         )
 
     @staticmethod

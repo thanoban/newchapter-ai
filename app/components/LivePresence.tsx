@@ -104,20 +104,37 @@ export function LivePresence() {
 
   if (session.mode === "embed") {
     return (
-      <div className="live-presence embedded-presence">
-        <iframe
-          title="Talk with Nelly"
-          src={session.embedUrl}
-          allow="camera; microphone; fullscreen"
-          allowFullScreen
-        />
-        <button
-          type="button"
-          className="end-call embedded-end-call"
-          onClick={() => setSession(null)}
-        >
-          Close
-        </button>
+      <div
+        className="mentor-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="mentor-call-title"
+      >
+        <div className="mentor-call">
+          <header className="mentor-call-header">
+            <div>
+              <span className="eyebrow">Live presence mentor</span>
+              <h2 id="mentor-call-title">Talk with Nelly</h2>
+            </div>
+            <button
+              type="button"
+              className="mentor-close"
+              onClick={() => setSession(null)}
+              aria-label="Close mentor call"
+            >
+              Close
+            </button>
+          </header>
+          <iframe
+            title="Talk with Nelly"
+            src={session.embedUrl}
+            allow="autoplay; camera; microphone; fullscreen"
+            allowFullScreen
+          />
+          <footer className="mentor-call-footer">
+            Speak naturally, then leave a short pause so Nelly can respond.
+          </footer>
+        </div>
       </div>
     );
   }

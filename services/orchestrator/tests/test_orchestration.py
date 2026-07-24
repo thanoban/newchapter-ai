@@ -5,8 +5,14 @@ from newchapter.orchestration import CareOrchestrator
 
 
 class StubGateway:
+    def __init__(self):
+        self.calls = []
+
     async def generate(self, *, agent, system_instruction, user_content):
         del system_instruction, user_content
+        self.calls.append(agent)
+        if agent == "voice-composer":
+            return "That sounds heavy. Take one slow breath with me. What feels strongest?"
         if agent == "composer":
             return "This hurts, and it makes sense. What is one kind thing you can do now?"
         return f"{agent} contribution"
@@ -32,6 +38,20 @@ class CareOrchestratorTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(result.mode, "vertex")
         self.assertIn("critic", result.contributors)
         self.assertIn("kind thing", result.message)
+
+    async def test_voice_turn_uses_one_low_latency_composition_call(self):
+        gateway = StubGateway()
+        result = await CareOrchestrator(gateway).handle(
+            TurnRequest(
+                "conversation-3",
+                "I am feeling depressed",
+                channel="voice",
+            )
+        )
+
+        self.assertEqual(gateway.calls, ["voice-composer"])
+        self.assertEqual(result.mode, "vertex-voice-fast-path")
+        self.assertIn("listener", result.contributors)
 
 
 if __name__ == "__main__":

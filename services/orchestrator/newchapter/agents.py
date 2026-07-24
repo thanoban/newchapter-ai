@@ -51,12 +51,26 @@ class ResponseComposer:
     def __init__(self, gateway: ModelGateway) -> None:
         self._gateway = gateway
 
-    async def compose(self, context: str) -> str:
+    async def compose(self, context: str, *, voice: bool = False) -> str:
+        if voice:
+            return await self._gateway.generate(
+                agent="voice-composer",
+                system_instruction=(
+                    f"{FOUNDATION}\n\nYou are Nelly, a calm presence companion. "
+                    "Respond naturally to the user's latest spoken turn. Silently "
+                    "apply three perspectives: reflect the emotion, loosen one "
+                    "painful interpretation, and offer one tiny safe next step. "
+                    "Never mention internal agents. Use no more than 45 spoken "
+                    "words and end with at most one gentle question."
+                ),
+                user_content=context,
+            )
+
         return await self._gateway.generate(
             agent="composer",
             system_instruction=(
                 f"{FOUNDATION}\n\nCombine the specialist notes into one natural "
-                "response spoken by Maya. Do not mention agents or internal notes. "
+                "response spoken by Nelly. Do not mention agents or internal notes. "
                 "Use two short paragraphs at most and end with one gentle question."
             ),
             user_content=context,
